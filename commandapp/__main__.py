@@ -12,7 +12,16 @@ app.version = cmdapp.__version__
 
 @app.register
 def test():
-    raise ValueError()
+    print("Test success")
+
+
+def subcmd():
+    raise RuntimeError()
+
+
+@app.register(name='raise')
+def cmd_raise():
+    subcmd()
 
 
 app.run()
