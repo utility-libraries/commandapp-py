@@ -3,6 +3,7 @@ import shlex
 if len(sys.argv) <= 1:
     sys.argv.extend(shlex.split(input("=> ")))
 import commandapp as cmdapp
+import typing as t
 
 
 app = cmdapp.CommandApp()
@@ -11,11 +12,12 @@ app.version = cmdapp.__version__
 
 
 @app.register
-def test():
+def test(param: t.Union[int, str]):
     r"""
     simple test command
     """
     print("Test success")
+    print(param)
 
 
 def subcmd():
