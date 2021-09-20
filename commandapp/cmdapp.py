@@ -36,6 +36,11 @@ class CommandApp(object):
         if not self.is_prepared:
             self.prepare()
         logger.info("App runs")
+        namespace: ap.Namespace = self.parser.parse_args()
+        runconfig = namespace.__dict__.copy()
+        commandname = runconfig.pop('CommandApp_command')
+        command = self.registered[commandname]
+        command.command(**runconfig)
 
     @property
     def is_prepared(self) -> bool:
