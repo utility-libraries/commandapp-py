@@ -12,6 +12,9 @@ app.version = cmdapp.__version__
 
 @app.register
 def test():
+    r"""
+    simple test command
+    """
     print("Test success")
 
 
@@ -21,6 +24,9 @@ def subcmd():
 
 @app.register(name='raise')
 def cmd_raise():
+    r"""
+    command to test exception output
+    """
     subcmd()
 
 
