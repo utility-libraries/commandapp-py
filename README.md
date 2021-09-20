@@ -23,7 +23,7 @@ def hello(name: str):
 
 @app.register(name="print")
 def cmd_print(text: str):
-    pass
+    print(text)
 
 
 app.prepare()
