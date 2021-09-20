@@ -1,11 +1,13 @@
 # -*- coding=utf-8 -*-
 import sys
 import argparse as ap
-import dataclasses
 import typing as t
 import types
 import logging
 import traceback
+
+from .classes import *
+from . import command_parser as cmdparser
 
 
 logger = logging.getLogger(__package__)
@@ -28,11 +30,22 @@ class CommandApp(object):
         self.parser = parser
         self._is_prepared: bool = False
 
-        self.registered: t.Dict[str, Command] = {}
+        self.registered: t.Dict[str, t.Union[Command, callable]] = {}
 
     def prepare(self):
         logger.info("App gets prepared")
-        self.parser.add_argument('CommandApp_command')
+        registered = self.registered.copy()
+        self.registered.clear()
+
+        helper = self.parser.add_subparsers(  # create helper for new sup-commands
+            title="command",
+            dest='CommandApp_command',
+            help='available commands')
+
+        for command in registered.values():  # got through each registered command (registered: Tuple[callable, kwargs])
+            command = cmdparser.add_subparser(helper, command)
+            self.registered[command.name] = command
+
         self._is_prepared = True
 
     def run(self):
@@ -92,13 +105,6 @@ class CommandApp(object):
     @version.setter
     def version(self, val: t.AnyStr):
         setattr(self, '_version', val)
-
-
-@dataclasses.dataclass
-class Command:
-    name: str  # name of the command
-    command: t.Callable  # callback
-    config: t.Dict[str, t.Any]  # configurations like `name`
 
 
 def get_default_parser() -> ap.ArgumentParser:
