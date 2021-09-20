@@ -3,7 +3,7 @@ tool to create a commandline application easily
 
 
 # usage
-`python3 -m pip install pycommandapp` (not implemented yes)
+`python3 -m pip install commandapp` (not implemented yes)
 ```python
 from commandapp import CommandApp
 
