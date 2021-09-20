@@ -2,6 +2,7 @@
 import argparse as ap
 import dataclasses
 import typing as t
+import types
 import logging
 
 
@@ -40,8 +41,27 @@ class CommandApp(object):
     def is_prepared(self) -> bool:
         return self._is_prepared
 
-    def register(self, cmd: t.Callable = None, **kwargs):
-        pass
+    def register(self, command: t.Callable = None, **config):
+        r"""
+
+        :param command:
+        :param config:
+        :return:
+        """
+        command: types.FunctionType
+        if callable(command):
+            # @app.register
+            # def new_cmd(): ...
+            name = command.__qualname__  # temporary name (gets overwritten in .prepare())
+            self.registered[name] = Command(name, command, config)
+            return command
+        else:
+            # @app.register(name=...)
+            # def new_cmd(): ...
+            def shell(f):
+                return self.register(f, **config)
+
+            return shell
 
     #
     #
