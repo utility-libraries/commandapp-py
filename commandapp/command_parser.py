@@ -9,11 +9,12 @@ import typing as t
 logger = logging.getLogger(__package__)
 
 
-def add_subparser(helper, command: Command) -> Command:
+def add_subparser(helper, command: Command, *, auto_type: bool) -> Command:
     r"""
 
     :param helper: argparse._SubParserAction
     :param command:
+    :param auto_type:
     :return:
     """
     config = command.config
@@ -28,7 +29,7 @@ def add_subparser(helper, command: Command) -> Command:
         description=helptext  # long help in command-help
     )
 
-    sig = inspect.signature(command.command)  # analyze registered function
+    sig: inspect.Signature = inspect.signature(command.command)  # analyze registered function
 
     for name, param in sig.parameters.items():
         if param.kind in (param.POSITIONAL_ONLY, param.POSITIONAL_OR_KEYWORD):
@@ -56,8 +57,8 @@ def add_subparser(helper, command: Command) -> Command:
             config['required'] = True
         if param.annotation:
             config['type'] = get_type(param.annotation)
-        else:
-            config['type'] = auto_type  # todo maybe needs to get removed? (not sure)
+        elif auto_type:
+            config['type'] = convert_auto_type  # todo maybe needs to get removed? (not sure)
 
         parser.add_argument(
             flag,
@@ -84,7 +85,7 @@ def get_type(cls) -> t.Callable:
     return shell
 
 
-def auto_type(string: str) -> t.Any:
+def convert_auto_type(string: str) -> t.Any:
     try:
         return eval(string, {}, {})  # todo is this allowed? [potential leak]
     except (SyntaxError, NameError, ValueError):

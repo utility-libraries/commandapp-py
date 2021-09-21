@@ -22,13 +22,15 @@ class CommandApp(object):
 
     """
 
-    def __init__(self, *, parser: ap.ArgumentParser = MISSING):
+    def __init__(self, *, parser: ap.ArgumentParser = MISSING, auto_type: bool = True):
         if parser is MISSING:
             logger.debug("No parser provided")
             parser = get_default_parser()
 
         self.parser = parser
         self._is_prepared: bool = False
+
+        self.auto_type = auto_type
 
         self.registered: t.Dict[str, t.Union[Command, callable]] = {}
 
@@ -43,7 +45,7 @@ class CommandApp(object):
             help='available commands')
 
         for command in registered.values():  # got through each registered command (registered: Tuple[callable, kwargs])
-            command = cmdparser.add_subparser(helper, command)
+            command = cmdparser.add_subparser(helper, command, auto_type=self.auto_type)
             self.registered[command.name] = command
 
         self._is_prepared = True
