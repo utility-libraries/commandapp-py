@@ -3,7 +3,8 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-from commandapp import __author__, __version__
+__author__ = "PlayerG9"
+__version__ = "0.2.0"
 
 setuptools.setup(
     name="commandapp",
