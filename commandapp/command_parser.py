@@ -9,6 +9,13 @@ import typing as t
 logger = logging.getLogger(__package__)
 
 
+auto_type_globals = {
+    'true': True,
+    'false': False,
+    'null': None,
+}
+
+
 def add_subparser(helper, command: Command, *, auto_type: bool) -> Command:
     r"""
 
@@ -55,7 +62,8 @@ def add_subparser(helper, command: Command, *, auto_type: bool) -> Command:
             config['nargs'] = '?'
         elif param.kind == param.KEYWORD_ONLY:
             config['required'] = True
-        if param.annotation:
+
+        if param.annotation is not param.empty:
             config['type'] = get_type(param.annotation)
         elif auto_type:
             config['type'] = convert_auto_type  # todo maybe needs to get removed? (not sure)
@@ -87,6 +95,6 @@ def get_type(cls) -> t.Callable:
 
 def convert_auto_type(string: str) -> t.Any:
     try:
-        return eval(string, {}, {})  # todo is this allowed? [potential leak]
+        return eval(string, auto_type_globals, {})  # todo is this allowed? [potential leak]
     except (SyntaxError, NameError, ValueError):
         return string
