@@ -12,12 +12,12 @@ app.version = cmdapp.__version__
 
 
 @app.register
-def test(param: t.Union[int, str], other: int):
+def test(param: t.Union[int, str], other: int, auto):
     r"""
     simple test command
     """
     print("Test success")
-    print([param, other])
+    print([param, other, auto])
 
 
 def subcmd():
