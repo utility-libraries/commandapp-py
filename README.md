@@ -1,5 +1,5 @@
 # <img width=auto height="30" src="https://raw.githubusercontent.com/PlayerG9/PyCommandApp/master/README.assets/pycmdicon.png" alt="Pillow logo"> PyCommandApp
-tool to create a commandline application easily
+library to create a commandline application easily
 
 <!--
 <p align="center">
