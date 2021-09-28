@@ -3,17 +3,11 @@ from .classes import *
 import inspect
 import argparse as ap
 import logging
+import ast
 import typing as t
 
 
 logger = logging.getLogger(__package__)
-
-
-auto_type_globals = {
-    'true': True,
-    'false': False,
-    'null': None,
-}
 
 
 def add_subparser(helper, command: Command, *, auto_type: bool) -> Command:
@@ -95,6 +89,6 @@ def get_type(cls) -> t.Callable:
 
 def convert_auto_type(string: str) -> t.Any:
     try:
-        return eval(string, auto_type_globals, {})  # todo is this allowed? [potential leak]
+        return ast.literal_eval(string)
     except (SyntaxError, NameError, ValueError):
         return string
