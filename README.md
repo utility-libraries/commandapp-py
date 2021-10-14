@@ -1,4 +1,4 @@
-# <img width=auto height="30" src="https://raw.githubusercontent.com/PlayerG9/PyCommandApp/master/README.assets/pycmdicon.png" alt="Pillow logo"> PyCommandApp
+# <img width=auto height="30" src="https://raw.githubusercontent.com/PlayerG9/PyCommandApp/master/README.assets/pycmdicon.png" alt="PyCommandApp"> PyCommandApp
 library to create a commandline application easily
 
 <!--
